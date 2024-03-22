@@ -49,6 +49,7 @@ public class TopProductTask {
         Properties properties = Property.getKafkaProperties("topProuct");
         DataStreamSource<String> dataStream = env.addSource(new FlinkKafkaConsumer<String>("con", new SimpleStringSchema(), properties));
 
+//        dataStream.print("dataStream>>>>>>>>>>>>>>>>>>>>>>>>>>");
         DataStream<TopProductEntity> topProduct = dataStream.map(new TopProductMapFunction()).
                 // 抽取时间戳做watermark 以 秒 为单位
                 assignTimestampsAndWatermarks(new AscendingTimestampExtractor<LogEntity>() {
@@ -76,6 +77,8 @@ public class TopProductTask {
 
                     }
                 });
+
+        topProduct.print("top>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         topProduct.addSink(new RedisSink<>(conf,new TopNRedisSink()));
 
         env.execute("Top N ");

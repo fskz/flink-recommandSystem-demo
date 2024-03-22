@@ -1,10 +1,10 @@
 #!/bin/bash
 function create_kafka_topic {
-    $KAFKA_HOME/bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic $1
+    $KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic $1
 }
 function send_messages_to_kafka {
     msg=$(generator_message)
-    echo -e $msg | $KAFKA_HOME/bin/kafka-console-producer.sh --broker-list kafka:9093 --topic $TOPIC
+    echo -e $msg | $KAFKA_HOME/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic $TOPIC
 }
 function rand {
     min=$1
@@ -21,7 +21,8 @@ function generator_message {
     echo $msg
 }
 
-TOPIC="log"
+#TOPIC="log"
+TOPIC="con"
 create_kafka_topic $TOPIC
 while true
 do

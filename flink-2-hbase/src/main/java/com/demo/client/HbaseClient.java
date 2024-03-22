@@ -17,6 +17,7 @@ public class HbaseClient {
         Configuration conf = HBaseConfiguration.create();
         conf.set("hbase.rootdir", Property.getStrValue("hbase.rootdir"));
         conf.set("hbase.zookeeper.quorum", Property.getStrValue("hbase.zookeeper.quorum"));
+        conf.set("hbase.zookeeper.property.clientPort", "2181");
         conf.set("hbase.client.scanner.timeout.period", Property.getStrValue("hbase.client.scanner.timeout.period"));
         conf.set("hbase.rpc.timeout", Property.getStrValue("hbase.rpc.timeout"));
         try {
@@ -126,8 +127,11 @@ public class HbaseClient {
     }
 
     public static void main(String[] args) throws IOException {
-        List<Map.Entry> ps = HbaseClient.getRow("ps", "1");
-        ps.forEach(System.out::println);
+//        List<Map.Entry> ps = HbaseClient.getRow("ps", "1");
+//        ps.forEach(System.out::println);
+        for (String user : HbaseClient.getAllKey("user")) {
+            System.out.println(user);
+        }
     }
 
 
