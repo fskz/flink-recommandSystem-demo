@@ -26,7 +26,7 @@ public class LogTask {
 
         Properties properties = Property.getKafkaProperties("log");
         DataStreamSource<String> dsKafka = env.addSource(
-                new FlinkKafkaConsumer<String>("log", new SimpleStringSchema(), properties)
+                new FlinkKafkaConsumer<String>("con", new SimpleStringSchema(), properties)
         );
         SingleOutputStreamOperator<LogEntity> ds = dsKafka.map(LogToEntity::getLog);
         ds.addSink(new HBaseSink<LogEntity>("con") {

@@ -14,18 +14,33 @@ public class HbaseClient {
     public static Connection conn;
 
     static {
-        Configuration conf = HBaseConfiguration.create();
-        conf.set("hbase.rootdir", Property.getStrValue("hbase.rootdir"));
-        conf.set("hbase.zookeeper.quorum", Property.getStrValue("hbase.zookeeper.quorum"));
-        conf.set("hbase.zookeeper.property.clientPort", "2181");
-        conf.set("hbase.client.scanner.timeout.period", Property.getStrValue("hbase.client.scanner.timeout.period"));
-        conf.set("hbase.rpc.timeout", Property.getStrValue("hbase.rpc.timeout"));
+        Configuration conf = getHbaseConf();
         try {
             conn = ConnectionFactory.createConnection(conf);
             admin = conn.getAdmin();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Configuration getHbaseConf(){
+        Configuration conf = HBaseConfiguration.create();
+        conf.set("hbase.rootdir", Property.getStrValue("hbase.rootdir"));
+        conf.set("hbase.zookeeper.quorum", Property.getStrValue("hbase.zookeeper.quorum"));
+        conf.set("hbase.zookeeper.property.clientPort", "2181");
+        conf.set("hbase.client.scanner.timeout.period", Property.getStrValue("hbase.client.scanner.timeout.period"));
+        conf.set("hbase.rpc.timeout", Property.getStrValue("hbase.rpc.timeout"));
+        return conf;
+    }
+
+    public static Connection getHbaseConn(){
+        Configuration conf = getHbaseConf();
+        try {
+            return ConnectionFactory.createConnection(conf);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void createTable(String tableName, String... columnFamilies) throws IOException {
